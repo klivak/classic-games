@@ -90,6 +90,11 @@ export default {
       } else if (this.snakeDirection == "right") {
         snakeHeadX++;
       }
+
+      this.checkFoodCollisions(snakeHeadX, snakeHeadY);
+      this.checkWallCollisions(snakeHeadX, snakeHeadY);
+    
+
       let snakeTail = this.snake.pop();
       snakeTail.x = snakeHeadX;
       snakeTail.y = snakeHeadY;
@@ -127,13 +132,36 @@ export default {
       console.log(event);
 
       if (event.keyCode == "39" && this.snakeDirection != "left") {
-          this.snakeDirection = "right";
+        this.snakeDirection = "right";
       } else if (event.keyCode == "40" && this.snakeDirection != "up") {
-          this.snakeDirection = "down";
+        this.snakeDirection = "down";
       }
+    },
+
+    // collision handling
+    checkFoodCollisions(snakeHeadX, snakeHeadY) {
+      if (snakeHeadX == this.food.x && snakeHeadY == this.food.y) {
+        console.log("FOOOD");
+        this.snake.push({
+          x: 0,
+          y: 0
+        });
+        this.snakeLength++;
+      }
+    },
+    checkWallCollisions(snakeHeadX, snakeHeadY) {
+      if (snakeHeadX * this.snakeSize >= this.screenWidth || snakeHeadX * this.snakeSize < 0) {
+        console.log('Wall found');
+      }
+    
     }
   }
 };
 </script>
   
 <style lang="scss" src="./../assets/scss/games/game-snake.scss"></style> 
+
+
+паспорт фото
+
+
