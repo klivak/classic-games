@@ -11,6 +11,7 @@ export default {
       snake: null,
       snakeLength: null,
       snakeSize: null,
+      snakeDirection: null,
 
       food: null,
 
@@ -27,6 +28,7 @@ export default {
 
     setInterval(this.gameLoop, 1000 / 30);
   },
+  beforeDestroy() {},
   methods: {
     // scene methods
     gameInitialize() {
@@ -38,6 +40,8 @@ export default {
 
       this.canvas.width = this.screenWidth;
       this.canvas.height = this.screenHeight;
+
+      document.addEventListener("keydown", this.keyboardHandler);
     },
 
     gameLoop() {
@@ -57,6 +61,7 @@ export default {
       this.snake = [];
       this.snakeLength = 15;
       this.snakeSize = 20;
+      this.snakeDirection = "down";
 
       for (let index = this.snakeLength - 1; index >= 0; index--) {
         this.snake.push({
@@ -80,8 +85,11 @@ export default {
       let snakeHeadX = this.snake[0].x;
       let snakeHeadY = this.snake[0].y;
 
-      snakeHeadX++;
-
+      if (this.snakeDirection == "down") {
+        snakeHeadY++;
+      } else if (this.ssnakeDirection == "right") {
+        snakeHeadX++;
+      }
       let snakeTail = this.snake.pop();
       snakeTail.x = snakeHeadX;
       snakeTail.y = snakeHeadY;
@@ -91,14 +99,38 @@ export default {
 
     // food
     foodInitialize() {
-        this.food = {
-            x: 0,
-            y: 0
-        };
+      this.food = {
+        x: 0,
+        y: 0
+      };
+      this.setFoodPosition();
     },
     foodDraw() {
-        this.context.fillStyle = "white";
-        this.context.fillRect(this.food.x, this.food.y, this.snakeSize, this.snakeSize);
+      this.context.fillStyle = "white";
+      this.context.fillRect(
+        this.food.x,
+        this.food.y,
+        this.snakeSize,
+        this.snakeSize
+      );
+    },
+    setFoodPosition() {
+      let randomX = Math.floor(Math.random() * this.screenWidth);
+      let randomY = Math.floor(Math.random() * this.screenHeight);
+
+      this.food.x = randomX;
+      this.food.y = randomY;
+    },
+
+    // events
+    keyboardHandler(event) {
+      console.log(event);
+
+      if (event.keyCode == "39") {
+          this.snakeDirection = "right";
+      } else if (event.keyCode == "40") {
+          this.snakeDirection = "down";
+      }
     }
   }
 };
