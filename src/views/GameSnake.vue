@@ -87,7 +87,7 @@ export default {
 
       if (this.snakeDirection == "down") {
         snakeHeadY++;
-      } else if (this.ssnakeDirection == "right") {
+      } else if (this.snakeDirection == "right") {
         snakeHeadX++;
       }
       let snakeTail = this.snake.pop();
@@ -108,8 +108,8 @@ export default {
     foodDraw() {
       this.context.fillStyle = "white";
       this.context.fillRect(
-        this.food.x,
-        this.food.y,
+        this.food.x * this.snakeSize,
+        this.food.y * this.snakeSize,
         this.snakeSize,
         this.snakeSize
       );
@@ -118,17 +118,17 @@ export default {
       let randomX = Math.floor(Math.random() * this.screenWidth);
       let randomY = Math.floor(Math.random() * this.screenHeight);
 
-      this.food.x = randomX;
-      this.food.y = randomY;
+      this.food.x = Math.floor(randomX / this.snakeSize);
+      this.food.y = Math.floor(randomY / this.snakeSize);
     },
 
     // events
     keyboardHandler(event) {
       console.log(event);
 
-      if (event.keyCode == "39") {
+      if (event.keyCode == "39" && this.snakeDirection != "left") {
           this.snakeDirection = "right";
-      } else if (event.keyCode == "40") {
+      } else if (event.keyCode == "40" && this.snakeDirection != "up") {
           this.snakeDirection = "down";
       }
     }
