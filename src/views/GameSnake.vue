@@ -18,7 +18,9 @@ export default {
       canvas: null,
       context: null,
       screenWidth: null,
-      screenHeight: null
+      screenHeight: null,
+
+      gameState: null,
     };
   },
   mounted() {
@@ -42,13 +44,18 @@ export default {
       this.canvas.height = this.screenHeight;
 
       document.addEventListener("keydown", this.keyboardHandler);
+
+      this.setState('PLAY');
     },
 
     gameLoop() {
       this.gameDraw();
-      this.snakeUpdate();
-      this.snakeDraw();
-      this.foodDraw();
+      if (this.gameState === 'PLAY') {
+        this.snakeUpdate();
+        this.snakeDraw();
+        this.foodDraw();
+      }
+
     },
 
     gameDraw() {
@@ -59,7 +66,7 @@ export default {
     // snake methods
     snakeInitialize() {
       this.snake = [];
-      this.snakeLength = 15;
+      this.snakeLength = 3;
       this.snakeSize = 20;
       this.snakeDirection = "down";
 
@@ -89,6 +96,10 @@ export default {
         snakeHeadY++;
       } else if (this.snakeDirection == "right") {
         snakeHeadX++;
+      } else if (this.snakeDirection == "top") {
+        snakeHeadY--;
+      }else if (this.snakeDirection == "left") {
+        snakeHeadX--;
       }
 
       this.checkFoodCollisions(snakeHeadX, snakeHeadY);
@@ -135,6 +146,10 @@ export default {
         this.snakeDirection = "right";
       } else if (event.keyCode == "40" && this.snakeDirection != "up") {
         this.snakeDirection = "down";
+      } else if (event.keyCode == "37" && this.snakeDirection != "right") {
+        this.snakeDirection = "left";
+      }else if (event.keyCode == "38" && this.snakeDirection != "down") {
+        this.snakeDirection = "top";
       }
     },
 
@@ -152,16 +167,19 @@ export default {
     checkWallCollisions(snakeHeadX, snakeHeadY) {
       if (snakeHeadX * this.snakeSize >= this.screenWidth || snakeHeadX * this.snakeSize < 0) {
         console.log('Wall found');
+        this.setState('GAME OVER');
       }
-    
+    },
+
+
+    // game state handling
+    setState(state) {
+      this.gameState = state;
     }
   }
 };
 </script>
   
 <style lang="scss" src="./../assets/scss/games/game-snake.scss"></style> 
-
-
-паспорт фото
 
 
