@@ -7,3 +7,9 @@ body {
     height: 100vh;
     overflow: hidden;
 }
+
+#game-over {
+  position: absolute;
+  visibility: hidden;
+}
+
